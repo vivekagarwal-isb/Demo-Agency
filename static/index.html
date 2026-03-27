@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmers EA Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="header-logo">F</div>
+      <div>
+        <div class="header-title">Farmers EA Analytics</div>
+        <div class="header-subtitle">Topline Multi-Agent Intelligence</div>
+      </div>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="header-status">
+      <span id="status-dot" class="status-dot"></span>
+      <span id="status-text"></span>
+    </div>
+    <button id="btn-run" class="btn-run">Run Pipeline</button>
+  </header>
+
+  <!-- PROGRESS BAR -->
+  <div id="pipeline-progress" class="pipeline-progress hidden">
+    <div id="progress-fill" class="pipeline-progress-fill"></div>
+  </div>
+
+  <!-- NAV TABS -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-tab="tab-overview"><span>📊</span> Overview</button>
+    <button class="nav-tab" data-tab="tab-forecast"><span>📈</span> Forecasting</button>
+    <button class="nav-tab" data-tab="tab-opportunities"><span>💰</span> Opportunities</button>
+    <button class="nav-tab" data-tab="tab-outliers"><span>⚠️</span> Outliers</button>
+    <button class="nav-tab" data-tab="tab-causal"><span>⚡</span> Causal</button>
+    <button class="nav-tab" data-tab="tab-shock"><span>🎛️</span> Shock Sim</button>
+    <button class="nav-tab" data-tab="tab-twin"><span>🌐</span> Digital Twin</button>
+    <button class="nav-tab" data-tab="tab-insights"><span>🧠</span> Insights</button>
+    <button class="nav-tab" data-tab="tab-report"><span>📄</span> Report</button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="app-main">
+
+    <!-- TAB: Overview -->
+    <section id="tab-overview" class="tab-panel active">
+      <div id="kpi-grid" class="kpi-grid">
+        <div id="kpi-gwp" class="kpi-card gwp">
+          <div class="kpi-label">Gross Written Premium</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-sub">Total GWP</div>
+        </div>
+        <div id="kpi-pif" class="kpi-card pif">
+          <div class="kpi-label">Policies in Force</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-sub">Active policies</div>
+        </div>
+        <div id="kpi-upside" class="kpi-card upside">
+          <div class="kpi-label">Upside Potential</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-sub">Identified opportunity</div>
+        </div>
+        <div id="kpi-agents" class="kpi-card agents">
+          <div class="kpi-label">Active Agents</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-sub">Producing agents</div>
+        </div>
+        <div id="kpi-renewal" class="kpi-card renewal">
+          <div class="kpi-label">Renewal Rate</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-sub">Portfolio retention</div>
+        </div>
+        <div id="kpi-outliers" class="kpi-card outliers">
+          <div class="kpi-label">Outliers Detected</div>
+          <div class="kpi-value">--</div>
+          <div class="kpi-sub">Anomalous records</div>
+        </div>
+      </div>
+
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <h3>GWP &amp; PIF Trend</h3>
+          <p>Monthly portfolio performance</p>
+          <div id="chart-portfolio-trend" class="chart-body"></div>
+        </div>
+        <div class="chart-card">
+          <h3>GWP by State</h3>
+          <p>Total gross written premium</p>
+          <div id="chart-state-map" class="chart-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Forecasting -->
+    <section id="tab-forecast" class="tab-panel">
+      <div class="section-header">
+        <span>📈</span>
+        <h2>Forecasting</h2>
+      </div>
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <h3>GWP Forecast (12-Month)</h3>
+          <div id="chart-forecast-gwp" class="chart-body"></div>
+        </div>
+        <div class="chart-card">
+          <h3>PIF Forecast (12-Month)</h3>
+          <div id="chart-forecast-pif" class="chart-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Opportunities -->
+    <section id="tab-opportunities" class="tab-panel">
+      <div class="section-header">
+        <span>💰</span>
+        <h2>Opportunity Ranking</h2>
+      </div>
+      <div class="chart-grid chart-grid-21">
+        <div class="chart-card">
+          <div id="opportunity-table" class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Agent</th>
+                  <th>State</th>
+                  <th>District</th>
+                  <th>GWP</th>
+                  <th>Score</th>
+                  <th>Upside</th>
+                  <th>Priority</th>
+                </tr>
+              </thead>
+              <tbody id="opportunity-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Score vs Upside</h3>
+          <div id="chart-opportunity-scatter" class="chart-body"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Leaderboard — Top 20 Agents</h3>
+        <div id="leaderboard-table" class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Agent</th>
+                <th>State</th>
+                <th>GWP</th>
+                <th>Score</th>
+                <th>Upside</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Outliers -->
+    <section id="tab-outliers" class="tab-panel">
+      <div class="section-header">
+        <span>⚠️</span>
+        <h2>Outlier Detection</h2>
+      </div>
+      <div class="chart-grid chart-grid-21">
+        <div class="chart-card">
+          <h3>Outlier Records</h3>
+          <div id="outlier-table" class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>State</th>
+                  <th>Period</th>
+                  <th>GWP</th>
+                  <th>Cancel Rate</th>
+                  <th>Type</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody id="outlier-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Outlier Type Distribution</h3>
+          <div id="chart-outlier-types" class="chart-body short"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Causal -->
+    <section id="tab-causal" class="tab-panel">
+      <div class="section-header">
+        <span>⚡</span>
+        <h2>Causal Inference</h2>
+      </div>
+      <div class="causal-grid">
+        <div class="chart-card">
+          <h3>Average Treatment Effects (ATE)</h3>
+          <div id="ate-list"></div>
+        </div>
+        <div class="chart-card">
+          <h3>Effect Magnitudes</h3>
+          <div id="chart-ate" class="chart-body"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Causal Summary</h3>
+        <pre id="causal-summary-text"></pre>
+      </div>
+    </section>
+
+    <!-- TAB: Shock Sim -->
+    <section id="tab-shock" class="tab-panel">
+      <div class="section-header">
+        <span>🎛️</span>
+        <h2>Shock Simulation Engine</h2>
+      </div>
+      <div class="shock-panel">
+        <h3>Business Levers</h3>
+        <div class="shock-grid">
+          <div class="slider-group">
+            <label for="slider-conversion">Conversion Rate</label>
+            <input type="range" id="slider-conversion" min="-0.30" max="0.30" step="0.01" value="0">
+            <span id="val-conversion">0%</span>
+          </div>
+          <div class="slider-group">
+            <label for="slider-retention">Retention Rate</label>
+            <input type="range" id="slider-retention" min="-0.20" max="0.20" step="0.01" value="0">
+            <span id="val-retention">0%</span>
+          </div>
+          <div class="slider-group">
+            <label for="slider-pricing">Pricing</label>
+            <input type="range" id="slider-pricing" min="-0.15" max="0.15" step="0.01" value="0">
+            <span id="val-pricing">0%</span>
+          </div>
+          <div class="slider-group">
+            <label for="slider-producers">Producer Count</label>
+            <input type="range" id="slider-producers" min="-0.40" max="0.40" step="0.01" value="0">
+            <span id="val-producers">0%</span>
+          </div>
+          <div class="slider-group">
+            <label for="slider-discount">Discount</label>
+            <input type="range" id="slider-discount" min="-0.20" max="0.20" step="0.01" value="0">
+            <span id="val-discount">0%</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:16px;">
+          <button class="btn-run" onclick="runShockSimulation()">Run Simulation</button>
+          <button class="btn-secondary" onclick="resetSliders()">Reset</button>
+        </div>
+        <div id="shock-impact" class="shock-impact-grid"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Scenario Comparison</h3>
+        <div id="chart-shock-comparison" class="chart-body"></div>
+      </div>
+    </section>
+
+    <!-- TAB: Digital Twin -->
+    <section id="tab-twin" class="tab-panel">
+      <div class="section-header">
+        <span>🌐</span>
+        <h2>Digital Twin Simulation</h2>
+      </div>
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <h3>GWP Trajectory by Scenario</h3>
+          <div id="chart-twin-gwp" class="chart-body tall"></div>
+        </div>
+        <div class="chart-card">
+          <h3>PIF Trajectory by Scenario</h3>
+          <div id="chart-twin-pif" class="chart-body tall"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <pre id="twin-summary-text"></pre>
+      </div>
+    </section>
+
+    <!-- TAB: Insights -->
+    <section id="tab-insights" class="tab-panel">
+      <div class="section-header">
+        <span>🧠</span>
+        <h2>AI Insights &amp; SHAP</h2>
+      </div>
+      <div class="chart-grid chart-grid-21">
+        <div class="chart-card">
+          <h3>SHAP Feature Importance</h3>
+          <div id="chart-shap" class="chart-body"></div>
+        </div>
+        <div class="chart-card">
+          <h3>AI-Generated Insights</h3>
+          <div id="insights-list" class="insight-list"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Memory &amp; Learning Status</h3>
+        <div id="learning-status"></div>
+      </div>
+    </section>
+
+    <!-- TAB: Report -->
+    <section id="tab-report" class="tab-panel">
+      <div class="section-header">
+        <span>📄</span>
+        <h2>Executive Report</h2>
+      </div>
+      <div id="report-body" class="report-body">
+        Run the pipeline to generate report.
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
